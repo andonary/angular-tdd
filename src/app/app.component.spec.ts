@@ -40,27 +40,26 @@ describe('AppComponent', () => {
     expect(app.cocktail).toEqual({});
   });
 
-  it('should inject appService and get cocktail', inject([AppService], (injectService: AppService) => {
-    fixture.detectChanges();
-    expect(app.cocktail).toEqual(sampleCocktail);
-    expect(app.errorMsg).not.toBeTruthy();
-  }));
-
   it('should injected via component and be MockAppService', () => {
     expect(componentService instanceof MockAppService).toBeTruthy();
   });
 
-  it('should has a sample cocktail', () => {
+  it('should inject appService and get cocktail', () => {
     fixture.detectChanges();
     expect(app.cocktail).toEqual(sampleCocktail);
   });
 
-  it('should has an error if API throw an error', inject([AppService], (injectService: AppService) => {
+  it('should inject appService and not get errorMsg', () => {
+    fixture.detectChanges();
+    expect(app.errorMsg).not.toBeTruthy();
+  });
+
+  it('should has an error if API throw an error', () => {
     spyOn(componentService, 'getOne').and.callFake(() => {
       return throwError(new Error('Fake error'));
     });
     fixture.detectChanges();
     expect(app.cocktail).toEqual({});
     expect(app.errorMsg).toBeTruthy();
-  }));
+  });
 });
