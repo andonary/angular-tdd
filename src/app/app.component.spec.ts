@@ -59,7 +59,15 @@ describe('AppComponent', () => {
       return throwError(new Error('Fake error'));
     });
     fixture.detectChanges();
+    expect(componentService.getOne).toHaveBeenCalled();
     expect(app.cocktail).toEqual({});
     expect(app.errorMsg).toBeTruthy();
+  });
+
+  it('should display a cocktail', () => {
+    fixture.detectChanges();
+    const componentDiv = fixture.nativeElement.querySelectorAll('.cocktail');
+    // @ts-ignore
+    expect(componentDiv.item(0).innerHTML).toContain(app.cocktail.strDrink);
   });
 });
