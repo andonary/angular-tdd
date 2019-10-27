@@ -1,31 +1,44 @@
-import { TestBed, async } from '@angular/core/testing';
+import {TestBed, async, fakeAsync, ComponentFixture, inject} from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import {AppService} from './app.service';
+import {of} from 'rxjs';
+import {sampleCocktail} from './cocktail.sample';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  let fixture: ComponentFixture<AppComponent>;
+  let app: AppComponent;
+  let bedService: AppService;
+
+  beforeEach(async(async () => {
+    await TestBed.configureTestingModule({
       declarations: [
         AppComponent
-      ],
+      ]}).overrideComponent(AppComponent, {
+        set: {
+          providers: [
+            { provide: AppService }
+          ]
+        }
     }).compileComponents();
+    bedService = TestBed.get(AppService);
+    spyOn(bedService, 'getOne').and.returnValue(of(sampleCocktail));
+
+    fixture = TestBed.createComponent(AppComponent);
+    app = fixture.debugElement.componentInstance;
   }));
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'angular-test'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('angular-test');
+  it('should has a cocktail', () => {
+    expect(app.cocktail).toBeDefined();
   });
 
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to angular-test!');
-  });
+  it('should inject appService and get cocktail', inject([AppService], (injectService: AppService) => {
+    expect(injectService).toBe(bedService);
+    app.ngOnInit().then(() => {
+      expect(app.cocktail).toEqual(sampleCocktail);
+    });
+  }));
 });
