@@ -7,18 +7,23 @@ import {AppService} from './app.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  cocktail = {};
+  public cocktail = {};
+  public errorMsg: string;
 
   constructor(private appService: AppService) {
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.getCocktail();
   }
 
   getCocktail() {
     this.appService.getOne().subscribe(cocktail => {
       this.cocktail = cocktail;
+      this.errorMsg = void 0;
+    }, () => {
+      this.cocktail = {};
+      this.errorMsg = 'Opération impossible';
     });
   }
 }

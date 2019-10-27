@@ -8,6 +8,9 @@ export class AppService {
 
   constructor() { }
 
+  /**
+   * WORK IN PROGRESS
+   */
   getOne(): Observable<any> {
     return of(null);
   }

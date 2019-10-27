@@ -1,3 +1,5 @@
+// API: https://www.thecocktaildb.com/api.php
+
 /* tslint:disable */
 export const sampleCocktail = {
   "idDrink": "12188",
